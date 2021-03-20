@@ -22,7 +22,8 @@ def parse_homework_status(homework):
     elif homework_status == 'reviewing':
         verdict = 'Работа взята на ревью.'
     elif homework_status == 'approved':
-        verdict = 'Ревьюеру всё понравилось, можно приступать к следующему уроку.'
+        verdict = '''Ревьюеру всё понравилось,
+        можно приступать к следующему уроку.'''
     else:
         return 'Статус работы ХЗ!'
     return f'У вас проверили работу "{homework_name}"!\n\n{verdict}'
@@ -32,13 +33,14 @@ def get_homework_statuses(current_timestamp):
     if current_timestamp is None:
         current_timestamp = int(time.time())
     URL = 'https://praktikum.yandex.ru/api/user_api/homework_statuses/'
-    headers = {f'Authorization': f'OAuth {PRAKTIKUM_TOKEN}'}
+    headers = {'Authorization': f'OAuth {PRAKTIKUM_TOKEN}'}
     params = {'from_date': current_timestamp}
     try:
         homewrork_statuses = requests.get(URL, headers=headers, params=params)
         return homewrork_statuses.json()
     except requests.RequestException:
         logging.error("Exception occured", exc_info=True)
+
 
 def send_message(message, bot_client):
     return bot_client.send_message(chat_id=CHAT_ID, text=message)
@@ -53,8 +55,10 @@ def main():
         try:
             new_homework = get_homework_statuses(current_timestamp)
             if new_homework.get('homeworks'):
-                send_message(parse_homework_status(new_homework.get('homeworks')[0]), bot_client)
-            current_timestamp = new_homework.get('current_date', current_timestamp)  # обновить timestamp
+                send_message(parse_homework_status(new_homework.get(
+                    'homeworks')[0]), bot_client)
+            current_timestamp = new_homework.get(
+                'current_date', current_timestamp)  # обновить timestamp
             time.sleep(10)  # опрашивать раз в пять минут
 
         except Exception as e:
