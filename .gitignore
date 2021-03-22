@@ -1,8 +1,8 @@
 .git/*
 env/
-venv2/
-/.venv2
-/.venv2/
+venv/
+.venv
+.venv/
 
 
 __pycache__/
