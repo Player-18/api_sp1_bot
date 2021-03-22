@@ -1,6 +1,6 @@
 .git/*
 env/
-/venv2
+venv2/
 /.venv2
 /.venv2/
 
@@ -22,5 +22,3 @@ posts/static/
 media/
 
 db.sqlite3
-
-my_account.session
